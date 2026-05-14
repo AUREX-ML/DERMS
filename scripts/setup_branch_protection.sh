@@ -6,7 +6,16 @@
 
 set -euo pipefail
 
-REPO="AUREX-ML/DERMS"
+REPO="${REPO:-}"
+if [ -z "$REPO" ]; then
+  REPO="$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null || true)"
+fi
+
+if [ -z "$REPO" ]; then
+  echo "Error: Unable to determine repository slug." >&2
+  echo "Set REPO=<owner/name> or run this script from within a GitHub repository that 'gh repo view' can resolve." >&2
+  exit 1
+fi
 
 echo "=================================================="
 echo " DERMS Branch Protection Setup"
