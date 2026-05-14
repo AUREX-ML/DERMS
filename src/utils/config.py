@@ -71,6 +71,33 @@ class Settings(BaseSettings):
         description="List of origins allowed by CORS middleware",
     )
 
+    # VPP — site edge identity
+    site_id: str = Field(default="site_A", description="Unique site identifier")
+
+    # VPP — ThingsBoard cloud
+    tb_rest_url: str = Field(
+        default="https://thingsboard.example.com",
+        description="ThingsBoard CE REST API base URL",
+    )
+    tb_username: str = Field(default="", description="ThingsBoard admin e-mail")
+    tb_password: str = Field(default="", description="ThingsBoard admin password")
+    tb_mqtt_host: str = Field(
+        default="thingsboard.example.com",
+        description="ThingsBoard MQTT broker hostname",
+    )
+    tb_mqtt_port: int = Field(default=8883, description="ThingsBoard MQTT TLS port")
+    tb_device_token: str = Field(
+        default="", description="Per-site device token for ThingsBoard MQTT auth"
+    )
+
+    # VPP — local Mosquitto broker
+    local_mqtt_host: str = Field(
+        default="localhost", description="Local Mosquitto broker hostname"
+    )
+    local_mqtt_port: int = Field(
+        default=1883, description="Local Mosquitto broker port"
+    )
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:

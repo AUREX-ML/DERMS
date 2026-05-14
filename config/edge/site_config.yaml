@@ -1,0 +1,57 @@
+site:
+  id: site_A
+  name: "Site A - Residential"
+  timezone: "Africa/Johannesburg"
+
+myems:
+  api_url: "http://localhost:8000"
+  poll_interval_seconds: 15
+
+mosquitto:
+  host: localhost
+  port: 1883
+
+thingsboard:
+  mqtt_host: "thingsboard.example.com"
+  mqtt_port: 8883
+  device_token: "replace-with-token"
+  rest_url: "https://thingsboard.example.com"
+
+ders:
+  - der_id: inv_01
+    der_type: solar
+    modbus_host: "192.168.1.10"
+    modbus_port: 502
+    registers:
+      active_power_kw: 0
+      energy_kwh: 1
+
+  - der_id: bess_01
+    der_type: battery
+    modbus_host: "192.168.1.11"
+    modbus_port: 502
+    registers:
+      active_power_kw: 40
+      state_of_charge: 41
+      curtail: 42
+
+  - der_id: m_01
+    der_type: meter
+    modbus_host: "192.168.1.12"
+    modbus_port: 502
+    registers:
+      active_power_kw: 0
+      energy_kwh: 1
+
+  - der_id: ev_01
+    der_type: evcharger
+    modbus_host: "192.168.1.13"
+    modbus_port: 502
+    registers:
+      active_power_kw: 0
+      charge_state: 1
+
+offline_buffer:
+  db_path: "./buffer.db"
+  max_age_hours: 48
+  replay_interval_seconds: 60

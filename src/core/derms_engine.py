@@ -170,3 +170,21 @@ class DERMSEngine:
             "interval": interval,
             "forecast": [p.model_dump() for p in forecast_points],
         }
+
+    # ------------------------------------------------------------------
+    # VPP portfolio
+    # ------------------------------------------------------------------
+
+    async def get_vpp_snapshot(self) -> dict[str, Any]:
+        """Return aggregated VPP portfolio snapshot from ThingsBoard.
+
+        Delegates to VPPAggregator which pulls live data from all sites.
+
+        Returns:
+            Serialised :class:`~src.vpp.aggregator.VPPPortfolioSnapshot` dict.
+        """
+        from src.vpp.aggregator import VPPAggregator
+
+        aggregator = VPPAggregator()
+        snapshot = await aggregator.get_portfolio_snapshot()
+        return snapshot.model_dump()
