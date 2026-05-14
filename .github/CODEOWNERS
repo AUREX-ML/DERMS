@@ -1,0 +1,19 @@
+# .github/CODEOWNERS
+# These owners are the default reviewers/maintainers for the paths below.
+# Ref: BRANCHING_STRATEGY.md — "Requires at least 1 approving review"
+
+# Global default — AUREX-ML reviews everything
+*                           @AUREX-ML
+
+# Core source code
+src/                        @AUREX-ML
+
+# CI/CD and infrastructure
+.github/                    @AUREX-ML
+docker-compose.yml          @AUREX-ML
+requirements.txt            @AUREX-ML
+/pyproject.toml             @AUREX-ML
+
+# Documentation
+docs/                       @AUREX-ML
+*.md                        @AUREX-ML
