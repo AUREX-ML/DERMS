@@ -6,7 +6,6 @@ import pytest
 
 from src.models.load_forecaster import (
     ForecastPoint,
-    LoadForecast,
     generate_dummy_forecast,
 )
 
