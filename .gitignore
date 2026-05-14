@@ -1,0 +1,117 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.env.local
+.env.*.local
+
+# Environment variables — NEVER commit real .env files
+.env
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Testing & coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.cover
+*.py,cover
+nosetests.xml
+test-results/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyright / Pylance
+pyrightconfig.json
+
+# Distribution / packaging
+*.manifest
+*.spec
+
+# Logs
+*.log
+logs/
+log/
+
+# Docker
+docker-data/
+volumes/
+.docker/
+
+# Database
+*.db
+*.sqlite3
+*.sqlite
+alembic/versions/*.pyc
+
+# OS artefacts
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# IDE / Editor
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ML model artefacts
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.pth
+models/artefacts/
+
+# Data files (large)
+data/raw/
+data/processed/
+!data/sample_load_profile.csv
+
+# Build outputs
+*.so
+*.dylib
+*.dll

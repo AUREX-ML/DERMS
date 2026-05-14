@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Bug Report
+    url: https://github.com/AUREX-ML/DERMS/issues/new?template=bug_report.md
+    about: Report a bug or unexpected behavior in DERMS
+  - name: Feature Request
+    url: https://github.com/AUREX-ML/DERMS/issues/new?template=feature_request.md
+    about: Propose a new feature or enhancement
+  - name: Security Vulnerability
+    url: https://github.com/AUREX-ML/DERMS/security/advisories/new
+    about: Report a security vulnerability privately (do NOT use public issues)
+  - name: Discussion / Q&A
+    url: https://github.com/AUREX-ML/DERMS/discussions
+    about: Ask questions or start a discussion about DERMS

@@ -1,0 +1,98 @@
+version: "3.9"
+
+services:
+  # ── DERMS Application ──────────────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: derms-app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://derms:${POSTGRES_PASSWORD:-derms_secret}@postgres:5432/derms
+      REDIS_URL: redis://redis:6379/0
+      MQTT_BROKER_URL: mqtt://mosquitto:1883
+      SECRET_KEY: ${SECRET_KEY:-change-me-in-dev}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      DEBUG: ${DEBUG:-false}
+      SIMULATION_MODE: ${SIMULATION_MODE:-false}
+      GRID_OPERATOR_ENDPOINT: ${GRID_OPERATOR_ENDPOINT:-https://grid-operator.example.com/oadr}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mosquitto:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    volumes:
+      - ./data:/app/data:ro
+
+  # ── PostgreSQL ─────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    container_name: derms-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: derms
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-derms_secret}
+      POSTGRES_DB: derms
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U derms -d derms"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Redis ──────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: derms-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Eclipse Mosquitto MQTT Broker ──────────────────────────────────────────
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: derms-mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_logs:/mosquitto/log
+    # Inline config: allow anonymous connections on port 1883 (dev only).
+    # For production, mount a proper mosquitto.conf with TLS and auth.
+    command: >
+      sh -c "echo 'listener 1883\nallow_anonymous true\npersistence true\npersistence_location /mosquitto/data/' > /mosquitto/config/mosquitto.conf
+      && mosquitto -c /mosquitto/config/mosquitto.conf"
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  mosquitto_data:
+    driver: local
+  mosquitto_logs:
+    driver: local
