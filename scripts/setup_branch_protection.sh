@@ -16,18 +16,27 @@ echo "=================================================="
 # ── PROTECT: main ─────────────────────────────────────
 echo ""
 echo "→ Applying protection to: main"
-gh api \
+echo '{
+  "required_status_checks": {
+    "strict": true,
+    "contexts": ["lint-and-test", "security-scan"]
+  },
+  "enforce_admins": true,
+  "required_pull_request_reviews": {
+    "required_approving_review_count": 1,
+    "dismiss_stale_reviews": true,
+    "require_code_owner_reviews": false
+  },
+  "restrictions": null,
+  "allow_force_pushes": false,
+  "allow_deletions": false,
+  "required_linear_history": false,
+  "block_creations": false
+}' | gh api \
   --method PUT \
   -H "Accept: application/vnd.github+json" \
   /repos/${REPO}/branches/main/protection \
-  --field required_status_checks='{"strict":true,"contexts":["lint-and-test","security-scan"]}' \
-  --field enforce_admins=true \
-  --field required_pull_request_reviews='{"required_approving_review_count":1,"dismiss_stale_reviews":true,"require_code_owner_reviews":false}' \
-  --field restrictions=null \
-  --field allow_force_pushes=false \
-  --field allow_deletions=false \
-  --field required_linear_history=false \
-  --field block_creations=false
+  --input -
 
 echo "  ✅ main: protected"
 echo "     - No direct commits"
@@ -38,18 +47,27 @@ echo "     - Enforced for admins"
 # ── PROTECT: develop ──────────────────────────────────
 echo ""
 echo "→ Applying protection to: develop"
-gh api \
+echo '{
+  "required_status_checks": {
+    "strict": true,
+    "contexts": ["lint-and-test"]
+  },
+  "enforce_admins": false,
+  "required_pull_request_reviews": {
+    "required_approving_review_count": 1,
+    "dismiss_stale_reviews": true,
+    "require_code_owner_reviews": false
+  },
+  "restrictions": null,
+  "allow_force_pushes": false,
+  "allow_deletions": false,
+  "required_linear_history": false,
+  "block_creations": false
+}' | gh api \
   --method PUT \
   -H "Accept: application/vnd.github+json" \
   /repos/${REPO}/branches/develop/protection \
-  --field required_status_checks='{"strict":true,"contexts":["lint-and-test"]}' \
-  --field enforce_admins=false \
-  --field required_pull_request_reviews='{"required_approving_review_count":1,"dismiss_stale_reviews":true,"require_code_owner_reviews":false}' \
-  --field restrictions=null \
-  --field allow_force_pushes=false \
-  --field allow_deletions=false \
-  --field required_linear_history=false \
-  --field block_creations=false
+  --input -
 
 echo "  ✅ develop: protected"
 echo "     - No direct commits from contributors"
