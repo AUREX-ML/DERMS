@@ -158,7 +158,7 @@ class DERMSEngine:
         Returns:
             Forecast payload with probabilistic load estimates.
         """
-        from src.models.load_forecaster import LoadForecast, generate_dummy_forecast
+        from src.models.load_forecaster import generate_dummy_forecast
 
         forecast_points = generate_dummy_forecast(
             horizon_hours=horizon_hours, interval=interval

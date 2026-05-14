@@ -2,8 +2,6 @@
 Unit tests for the BatteryOptimizer.
 """
 
-import pytest
-
 from src.core.optimizer import BatteryOptimizer
 
 
