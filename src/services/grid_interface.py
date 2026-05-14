@@ -33,9 +33,7 @@ class GridInterface:
             extra={"endpoint": self.endpoint, "simulation": self.simulation_mode},
         )
 
-    async def submit_dispatch_schedule(
-        self, schedule: list[dict[str, Any]]
-    ) -> bool:
+    async def submit_dispatch_schedule(self, schedule: list[dict[str, Any]]) -> bool:
         """Submit an aggregated dispatch schedule to the grid operator.
 
         Args:

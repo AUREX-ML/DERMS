@@ -86,9 +86,7 @@ class DERMSEngine:
             resources = [r for r in resources if r.get("site_id") == site_id]
         return resources[offset : offset + limit]
 
-    async def get_resource_status(
-        self, resource_id: str
-    ) -> dict[str, Any] | None:
+    async def get_resource_status(self, resource_id: str) -> dict[str, Any] | None:
         """Return the latest telemetry snapshot for a DER.
 
         In production this reads from the Redis cache populated by the

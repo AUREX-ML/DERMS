@@ -4,7 +4,11 @@ Unit tests for the load forecaster.
 
 import pytest
 
-from src.models.load_forecaster import ForecastPoint, LoadForecast, generate_dummy_forecast
+from src.models.load_forecaster import (
+    ForecastPoint,
+    LoadForecast,
+    generate_dummy_forecast,
+)
 
 
 class TestForecastPoint:
@@ -59,9 +63,7 @@ class TestGenerateDummyForecast:
         from datetime import datetime, timezone
 
         points = generate_dummy_forecast(horizon_hours=2, interval="1h", seed=0)
-        timestamps = [
-            datetime.fromisoformat(p.timestamp) for p in points
-        ]
+        timestamps = [datetime.fromisoformat(p.timestamp) for p in points]
         deltas = [
             (timestamps[i + 1] - timestamps[i]).seconds
             for i in range(len(timestamps) - 1)
