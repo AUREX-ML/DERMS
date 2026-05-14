@@ -12,7 +12,7 @@ src/                        @AUREX-ML
 .github/                    @AUREX-ML
 docker-compose.yml          @AUREX-ML
 requirements.txt            @AUREX-ML
-pyproject.toml              @AUREX-ML
+/pyproject.toml             @AUREX-ML
 
 # Documentation
 docs/                       @AUREX-ML
