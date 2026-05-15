@@ -10,7 +10,6 @@ from __future__ import annotations
 import asyncio
 import json
 import ssl
-import time
 from typing import Any
 
 import paho.mqtt.client as mqtt
