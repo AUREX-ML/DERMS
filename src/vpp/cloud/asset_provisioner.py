@@ -16,7 +16,10 @@ from src.vpp.cloud.thingsboard_client import ThingsBoardClient
 logger = get_logger(__name__)
 
 _DEFAULT_HIERARCHY_PATH = (
-    Path(__file__).resolve().parents[4] / "config" / "thingsboard" / "asset_hierarchy.json"
+    Path(__file__).resolve().parents[4]
+    / "config"
+    / "thingsboard"
+    / "asset_hierarchy.json"
 )
 
 
@@ -76,7 +79,10 @@ class AssetProvisioner:
         assets = await self._client.get_portfolio_summary()
         for asset in assets:
             if asset.get("name") == name and asset.get("type") == asset_type:
-                logger.info("Asset already exists", extra={"name": name, "id": asset["id"]["id"]})
+                logger.info(
+                    "Asset already exists",
+                    extra={"name": name, "id": asset["id"]["id"]},
+                )
                 return asset["id"]["id"]
 
         # Create the asset
@@ -86,7 +92,9 @@ class AssetProvisioner:
             json={"name": name, "type": asset_type},
         )
         asset_id = created["id"]["id"]
-        logger.info("Asset created", extra={"name": name, "type": asset_type, "id": asset_id})
+        logger.info(
+            "Asset created", extra={"name": name, "type": asset_type, "id": asset_id}
+        )
         return asset_id
 
     async def _get_or_create_device(self, name: str, device_type: str) -> str:
@@ -107,7 +115,10 @@ class AssetProvisioner:
         )
         for device in data.get("data", []):
             if device.get("name") == name and device.get("type") == device_type:
-                logger.info("Device already exists", extra={"name": name, "id": device["id"]["id"]})
+                logger.info(
+                    "Device already exists",
+                    extra={"name": name, "id": device["id"]["id"]},
+                )
                 return device["id"]["id"]
 
         created = await self._client._request(
@@ -116,7 +127,9 @@ class AssetProvisioner:
             json={"name": name, "type": device_type},
         )
         device_id = created["id"]["id"]
-        logger.info("Device created", extra={"name": name, "type": device_type, "id": device_id})
+        logger.info(
+            "Device created", extra={"name": name, "type": device_type, "id": device_id}
+        )
         return device_id
 
     async def link_device_to_asset(self, device_id: str, asset_id: str) -> None:
@@ -167,7 +180,11 @@ class AssetProvisioner:
             )
             await self.link_device_to_asset(device_id, site_asset_id)
             devices_report.append(
-                {"der_id": device_cfg["der_id"], "device_id": device_id, "name": device_cfg["name"]}
+                {
+                    "der_id": device_cfg["der_id"],
+                    "device_id": device_id,
+                    "name": device_cfg["name"],
+                }
             )
 
         report = {

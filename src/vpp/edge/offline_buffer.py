@@ -158,7 +158,9 @@ class OfflineBuffer:
                 )
                 deleted = cursor.rowcount
                 await conn.commit()
-        logger.info("Pruned old buffer records", extra={"deleted": deleted, "cutoff": cutoff})
+        logger.info(
+            "Pruned old buffer records", extra={"deleted": deleted, "cutoff": cutoff}
+        )
         return deleted
 
     async def pending_count(self) -> int:

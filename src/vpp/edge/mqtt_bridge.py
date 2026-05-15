@@ -137,7 +137,9 @@ class MQTTBridgeAgent:
     ) -> None:
         if rc == 0:
             client.subscribe(self._topic, qos=1)
-            logger.info("Connected to local broker, subscribed", extra={"topic": self._topic})
+            logger.info(
+                "Connected to local broker, subscribed", extra={"topic": self._topic}
+            )
         else:
             logger.error("Local broker connection failed", extra={"rc": rc})
 

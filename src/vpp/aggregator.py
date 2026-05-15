@@ -238,7 +238,11 @@ class VPPAggregator:
                     params={"power_kw": site_power_kw, "duration_s": duration_s},
                 )
                 results.append(
-                    {"site_id": site.site_id, "power_kw": site_power_kw, "response": resp}
+                    {
+                        "site_id": site.site_id,
+                        "power_kw": site_power_kw,
+                        "response": resp,
+                    }
                 )
                 logger.info(
                     "Dispatch RPC sent",
@@ -250,7 +254,11 @@ class VPPAggregator:
                     extra={"site_id": site.site_id, "error": str(exc)},
                 )
                 results.append(
-                    {"site_id": site.site_id, "power_kw": site_power_kw, "error": str(exc)}
+                    {
+                        "site_id": site.site_id,
+                        "power_kw": site_power_kw,
+                        "error": str(exc),
+                    }
                 )
 
         return results

@@ -10,7 +10,6 @@ import pytest_asyncio
 
 from src.vpp.edge.offline_buffer import OfflineBuffer
 
-
 # ---------------------------------------------------------------------------
 # Fixture
 # ---------------------------------------------------------------------------
@@ -47,8 +46,11 @@ async def test_store_inserts_record(buf):
     await buf.store(SAMPLE_PAYLOAD)
 
     import aiosqlite
+
     async with aiosqlite.connect(buf._db_path) as conn:
-        async with conn.execute("SELECT COUNT(*) FROM telemetry_buffer WHERE forwarded = 0") as cur:
+        async with conn.execute(
+            "SELECT COUNT(*) FROM telemetry_buffer WHERE forwarded = 0"
+        ) as cur:
             row = await cur.fetchone()
     assert row[0] == 1
 
@@ -59,6 +61,7 @@ async def test_store_persists_payload_json(buf):
     await buf.store(SAMPLE_PAYLOAD)
 
     import aiosqlite
+
     async with aiosqlite.connect(buf._db_path) as conn:
         conn.row_factory = aiosqlite.Row
         async with conn.execute("SELECT payload FROM telemetry_buffer") as cur:
@@ -131,6 +134,7 @@ async def test_replay_increments_retry_count_on_failure(buf):
     await buf.replay(failing_fn)
 
     import aiosqlite
+
     async with aiosqlite.connect(buf._db_path) as conn:
         async with conn.execute(
             "SELECT forwarded, retry_count FROM telemetry_buffer"
@@ -173,6 +177,7 @@ async def test_prune_deletes_old_forwarded_records(buf):
 
     # Manually mark the record as forwarded with an old created_at
     import aiosqlite
+
     old_time = (datetime.now(timezone.utc) - timedelta(hours=72)).isoformat()
     async with aiosqlite.connect(buf._db_path) as conn:
         await conn.execute(
@@ -196,6 +201,7 @@ async def test_prune_keeps_recent_forwarded_records(buf):
 
     # Mark as forwarded but keep created_at recent (now)
     import aiosqlite
+
     async with aiosqlite.connect(buf._db_path) as conn:
         await conn.execute("UPDATE telemetry_buffer SET forwarded = 1")
         await conn.commit()
@@ -210,11 +216,10 @@ async def test_prune_does_not_delete_pending_records(buf):
     await buf.store(SAMPLE_PAYLOAD)
 
     import aiosqlite
+
     old_time = (datetime.now(timezone.utc) - timedelta(hours=100)).isoformat()
     async with aiosqlite.connect(buf._db_path) as conn:
-        await conn.execute(
-            "UPDATE telemetry_buffer SET created_at = ?", (old_time,)
-        )
+        await conn.execute("UPDATE telemetry_buffer SET created_at = ?", (old_time,))
         await conn.commit()
 
     deleted = await buf.prune(max_age_hours=48)

@@ -11,7 +11,6 @@ from pydantic import ValidationError
 from src.vpp.edge.dispatch_agent import DispatchAgent, DispatchCommand
 from src.vpp.edge.modbus_writer import ModbusWriter
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------

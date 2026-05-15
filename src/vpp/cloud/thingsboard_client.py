@@ -40,7 +40,9 @@ class ThingsBoardClient:
     """
 
     def __init__(self) -> None:
-        self._base_url: str = getattr(settings, "tb_rest_url", "https://thingsboard.example.com").rstrip("/")
+        self._base_url: str = getattr(
+            settings, "tb_rest_url", "https://thingsboard.example.com"
+        ).rstrip("/")
         self._username: str = getattr(settings, "tb_username", "")
         self._password: str = getattr(settings, "tb_password", "")
         self._token: str | None = None
@@ -79,7 +81,9 @@ class ThingsBoardClient:
     def _auth_headers(self) -> dict[str, str]:
         """Return the Authorization header dict for authenticated requests."""
         if not self._token:
-            raise RuntimeError("ThingsBoard token not yet obtained — call refresh_token() first")
+            raise RuntimeError(
+                "ThingsBoard token not yet obtained — call refresh_token() first"
+            )
         return {"X-Authorization": f"Bearer {self._token}"}
 
     # ------------------------------------------------------------------
@@ -154,7 +158,9 @@ class ThingsBoardClient:
                 await asyncio.sleep(delay)
                 delay *= 2
 
-        raise RuntimeError(f"ThingsBoard API request failed after {_MAX_RETRIES} retries") from last_exc
+        raise RuntimeError(
+            f"ThingsBoard API request failed after {_MAX_RETRIES} retries"
+        ) from last_exc
 
     # ------------------------------------------------------------------
     # Public API methods

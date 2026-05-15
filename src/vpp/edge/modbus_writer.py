@@ -28,7 +28,9 @@ _MAX_RETRIES = 3
 _RETRY_BASE_DELAY = 1.0  # seconds — doubles on each retry
 
 
-def _load_der_registry(config_path: str | Path | None = None) -> dict[str, dict[str, Any]]:
+def _load_der_registry(
+    config_path: str | Path | None = None,
+) -> dict[str, dict[str, Any]]:
     """Load the DER Modbus registry from the site YAML config.
 
     Args:
@@ -39,10 +41,15 @@ def _load_der_registry(config_path: str | Path | None = None) -> dict[str, dict[
         Mapping of ``der_id`` → ``{modbus_host, modbus_port}``.
     """
     if config_path is None:
-        config_path = Path(__file__).resolve().parents[4] / "config" / "edge" / "site_config.yaml"
+        config_path = (
+            Path(__file__).resolve().parents[4] / "config" / "edge" / "site_config.yaml"
+        )
     path = Path(config_path)
     if not path.exists():
-        logger.warning("site_config.yaml not found, using empty DER registry", extra={"path": str(path)})
+        logger.warning(
+            "site_config.yaml not found, using empty DER registry",
+            extra={"path": str(path)},
+        )
         return {}
     with path.open() as fh:
         data = yaml.safe_load(fh)

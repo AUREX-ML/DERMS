@@ -10,7 +10,6 @@ import pytest
 from src.vpp.edge.mqtt_bridge import MQTTBridgeAgent, TelemetryPayload
 from src.vpp.edge.offline_buffer import OfflineBuffer
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
@@ -84,7 +83,9 @@ def test_validate_payload_malformed_json(agent):
 
 def test_validate_payload_bad_topic_structure(agent):
     """Topics with wrong segment count return None."""
-    result = agent._validate_payload("vpp/site_A/telemetry", json.dumps(VALID_PAYLOAD).encode())
+    result = agent._validate_payload(
+        "vpp/site_A/telemetry", json.dumps(VALID_PAYLOAD).encode()
+    )
     assert result is None
 
 
@@ -94,7 +95,9 @@ def test_validate_payload_extracts_topic_fields(agent):
         "timestamp": "2026-05-15T10:00:00Z",
         "active_power_kw": 10.0,
     }
-    result = agent._validate_payload(VALID_TOPIC, json.dumps(payload_without_meta).encode())
+    result = agent._validate_payload(
+        VALID_TOPIC, json.dumps(payload_without_meta).encode()
+    )
     assert result is not None
     assert result.site_id == "site_A"
     assert result.der_type == "battery"
@@ -109,9 +112,11 @@ def test_validate_payload_extracts_topic_fields(agent):
 def test_start_simulation_mode_skips_connection(agent):
     """start() in simulation mode returns without connecting to any broker."""
     # Patch the module-level settings object that the agent references
-    with patch("src.vpp.edge.mqtt_bridge.settings") as mock_settings, \
-         patch.object(agent, "_build_tb_client") as mock_tb, \
-         patch.object(agent, "_build_local_client") as mock_local:
+    with (
+        patch("src.vpp.edge.mqtt_bridge.settings") as mock_settings,
+        patch.object(agent, "_build_tb_client") as mock_tb,
+        patch.object(agent, "_build_local_client") as mock_local,
+    ):
         mock_settings.simulation_mode = True
         agent._settings = mock_settings
         agent.start()
