@@ -102,8 +102,6 @@ class TelemetryService:
             topic: Full MQTT topic string.
             raw: Raw message payload bytes.
         """
-        import json
-
         parts = topic.split("/")
         if len(parts) != 5:
             logger.warning(
