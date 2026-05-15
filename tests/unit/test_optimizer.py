@@ -2,12 +2,12 @@
 Unit tests for the BatteryOptimizer.
 """
 
-import pytest
-
 from src.core.optimizer import BatteryOptimizer
 
 
-def _make_battery_resource(resource_id: str = "bat-001", capacity_kw: float = 100.0) -> dict:
+def _make_battery_resource(
+    resource_id: str = "bat-001", capacity_kw: float = 100.0
+) -> dict:
     return {
         "id": resource_id,
         "type": "battery",
@@ -28,7 +28,10 @@ class TestBatteryOptimizerHeuristic:
 
     def test_schedule_has_correct_number_of_intervals(self):
         optimizer = BatteryOptimizer(strategy="heuristic")
-        resources = [_make_battery_resource("bat-001"), _make_battery_resource("bat-002")]
+        resources = [
+            _make_battery_resource("bat-001"),
+            _make_battery_resource("bat-002"),
+        ]
         result = optimizer.optimize(resources, {"horizon_hours": 12})
         # 12 hours × 2 batteries = 24 schedule entries
         assert len(result["schedule"]) == 24

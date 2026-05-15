@@ -86,9 +86,7 @@ class DERMSEngine:
             resources = [r for r in resources if r.get("site_id") == site_id]
         return resources[offset : offset + limit]
 
-    async def get_resource_status(
-        self, resource_id: str
-    ) -> dict[str, Any] | None:
+    async def get_resource_status(self, resource_id: str) -> dict[str, Any] | None:
         """Return the latest telemetry snapshot for a DER.
 
         In production this reads from the Redis cache populated by the
@@ -160,7 +158,7 @@ class DERMSEngine:
         Returns:
             Forecast payload with probabilistic load estimates.
         """
-        from src.models.load_forecaster import LoadForecast, generate_dummy_forecast
+        from src.models.load_forecaster import generate_dummy_forecast
 
         forecast_points = generate_dummy_forecast(
             horizon_hours=horizon_hours, interval=interval
@@ -172,3 +170,21 @@ class DERMSEngine:
             "interval": interval,
             "forecast": [p.model_dump() for p in forecast_points],
         }
+
+    # ------------------------------------------------------------------
+    # VPP portfolio
+    # ------------------------------------------------------------------
+
+    async def get_vpp_snapshot(self) -> dict[str, Any]:
+        """Return aggregated VPP portfolio snapshot from ThingsBoard.
+
+        Delegates to VPPAggregator which pulls live data from all sites.
+
+        Returns:
+            Serialised :class:`~src.vpp.aggregator.VPPPortfolioSnapshot` dict.
+        """
+        from src.vpp.aggregator import VPPAggregator
+
+        aggregator = VPPAggregator()
+        snapshot = await aggregator.get_portfolio_snapshot()
+        return snapshot.model_dump()

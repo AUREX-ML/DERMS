@@ -73,9 +73,9 @@ def generate_synthetic_resources(n: int, rng: random.Random) -> list[dict]:
                 "type": res_type,
                 "site_id": f"site-{i % 3}",
                 "capacity_kw": round(rng.uniform(50.0, 500.0), 1),
-                "state_of_charge": round(rng.uniform(0.2, 0.8), 2)
-                if res_type == "battery"
-                else None,
+                "state_of_charge": (
+                    round(rng.uniform(0.2, 0.8), 2) if res_type == "battery" else None
+                ),
             }
         )
     return resources

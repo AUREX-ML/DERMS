@@ -1,0 +1,44 @@
+{
+  "vpp_portfolio": {
+    "name": "VPP Portfolio",
+    "type": "VPP"
+  },
+  "sites": [
+    {
+      "site_id": "site_A",
+      "name": "Site A - Residential",
+      "type": "VPP_Site",
+      "location": "Johannesburg, Gauteng, ZA",
+      "devices": [
+        {
+          "der_id": "inv_01",
+          "der_type": "solar",
+          "name": "Solar Inverter 01",
+          "modbus_host": "192.168.1.10",
+          "modbus_port": 502
+        },
+        {
+          "der_id": "bess_01",
+          "der_type": "battery",
+          "name": "Battery BESS 01",
+          "modbus_host": "192.168.1.11",
+          "modbus_port": 502
+        },
+        {
+          "der_id": "m_01",
+          "der_type": "meter",
+          "name": "Smart Meter 01",
+          "modbus_host": "192.168.1.12",
+          "modbus_port": 502
+        },
+        {
+          "der_id": "ev_01",
+          "der_type": "evcharger",
+          "name": "EV Charger 01",
+          "modbus_host": "192.168.1.13",
+          "modbus_port": 502
+        }
+      ]
+    }
+  ]
+}

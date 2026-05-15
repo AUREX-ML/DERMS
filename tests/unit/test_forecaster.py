@@ -4,7 +4,10 @@ Unit tests for the load forecaster.
 
 import pytest
 
-from src.models.load_forecaster import ForecastPoint, LoadForecast, generate_dummy_forecast
+from src.models.load_forecaster import (
+    ForecastPoint,
+    generate_dummy_forecast,
+)
 
 
 class TestForecastPoint:
@@ -56,12 +59,10 @@ class TestGenerateDummyForecast:
         assert [p.load_kw for p in points_a] != [p.load_kw for p in points_b]
 
     def test_timestamps_are_sequential(self):
-        from datetime import datetime, timezone
+        from datetime import datetime
 
         points = generate_dummy_forecast(horizon_hours=2, interval="1h", seed=0)
-        timestamps = [
-            datetime.fromisoformat(p.timestamp) for p in points
-        ]
+        timestamps = [datetime.fromisoformat(p.timestamp) for p in points]
         deltas = [
             (timestamps[i + 1] - timestamps[i]).seconds
             for i in range(len(timestamps) - 1)
