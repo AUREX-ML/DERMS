@@ -8,6 +8,10 @@ import { SavingsMetrics } from './components/v2/SavingsMetrics';
 import { ActiveAlarms } from './components/v2/ActiveAlarms';
 import { SustainabilityMetrics } from './components/v2/SustainabilityMetrics';
 import { RaspberryPiGateways } from './components/v2/RaspberryPiGateways';
+import { BurgerMenu } from './components/v2/BurgerMenu';
+import { SitesDetailView } from './components/v2/views/SitesDetailView';
+import { PowerFlowDetailView } from './components/v2/views/PowerFlowDetailView';
+import { BatteryDetailView } from './components/v2/views/BatteryDetailView';
 
 // Generate 24-hour power flow data
 function generate24HourData() {
@@ -38,6 +42,7 @@ function generate24HourData() {
 }
 
 export default function AppV2() {
+  const [currentView, setCurrentView] = useState('overview');
   const [currentTime, setCurrentTime] = useState('14:47');
   const [frequency, setFrequency] = useState(50.02);
   const [totalOutput, setTotalOutput] = useState(1.24);
@@ -156,8 +161,88 @@ export default function AppV2() {
     document.documentElement.classList.add('dark');
   }, []);
 
+  const renderView = () => {
+    switch (currentView) {
+      case 'sites':
+        return <SitesDetailView onBack={() => setCurrentView('overview')} />;
+      case 'power':
+        return <PowerFlowDetailView onBack={() => setCurrentView('overview')} />;
+      case 'battery':
+        return <BatteryDetailView onBack={() => setCurrentView('overview')} />;
+      case 'savings':
+      case 'sustainability':
+      case 'gateways':
+      case 'schedule':
+      case 'alarms':
+        return (
+          <div className="space-y-4">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setCurrentView('overview')}
+                className="w-10 h-10 bg-secondary rounded-lg flex items-center justify-center hover:bg-secondary/80 transition-colors"
+              >
+                ←
+              </button>
+              <div>
+                <h2 className="text-xl font-semibold capitalize">{currentView}</h2>
+                <p className="text-sm text-muted-foreground">Detailed view coming soon</p>
+              </div>
+            </div>
+          </div>
+        );
+      case 'overview':
+      default:
+        return (
+          <>
+            {/* Site List - Full Width - Clickable */}
+            <div onClick={() => setCurrentView('sites')} className="cursor-pointer">
+              <SiteList sites={sites} />
+            </div>
+
+            {/* Widget Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div onClick={() => setCurrentView('power')} className="cursor-pointer">
+                <PowerFlowTrend
+                  solarData={powerFlowData.solarData}
+                  bessData={powerFlowData.bessData}
+                  gridData={powerFlowData.gridData}
+                />
+              </div>
+              <div onClick={() => setCurrentView('schedule')} className="cursor-pointer">
+                <DispatchSchedule events={dispatchEvents} />
+              </div>
+              <div onClick={() => setCurrentView('savings')} className="cursor-pointer">
+                <SavingsMetrics gridImportAvoided={2.1} costSaved={59850} demandChargeSaved={12000} />
+              </div>
+            </div>
+
+            {/* Widget Grid Row 2 */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div onClick={() => setCurrentView('alarms')} className="cursor-pointer">
+                <ActiveAlarms alarms={alarms} />
+              </div>
+              <div onClick={() => setCurrentView('sustainability')} className="cursor-pointer">
+                <SustainabilityMetrics
+                  solarGenerated={3.8}
+                  co2Offset={1140}
+                  kcuEstimate={1.14}
+                  greenCertStatus="Pending EPRA"
+                />
+              </div>
+              <div onClick={() => setCurrentView('gateways')} className="cursor-pointer">
+                <RaspberryPiGateways gateways={gateways} />
+              </div>
+            </div>
+          </>
+        );
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#1a1f2e] text-foreground">
+      {/* Burger Menu */}
+      <BurgerMenu currentView={currentView} onNavigate={setCurrentView} />
+
       {/* Header */}
       <DashboardHeader
         operator="Actis Energy Management"
@@ -166,43 +251,21 @@ export default function AppV2() {
         isLive={true}
       />
 
-      {/* Quick Stats Bar */}
-      <QuickStatsBar
-        totalOutput={totalOutput}
-        gridFrequency={frequency}
-        portfolioSoc={Math.round(portfolioSoc)}
-        sitesCount={sites.length}
-        tariffBand={tariff.band}
-        tariffRate={tariff.rate}
-      />
+      {/* Quick Stats Bar - Only on overview */}
+      {currentView === 'overview' && (
+        <QuickStatsBar
+          totalOutput={totalOutput}
+          gridFrequency={frequency}
+          portfolioSoc={Math.round(portfolioSoc)}
+          sitesCount={sites.length}
+          tariffBand={tariff.band}
+          tariffRate={tariff.rate}
+        />
+      )}
 
       {/* Main Content */}
-      <main className="p-4 space-y-4">
-        {/* Site List - Full Width */}
-        <SiteList sites={sites} />
-
-        {/* Widget Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <PowerFlowTrend
-            solarData={powerFlowData.solarData}
-            bessData={powerFlowData.bessData}
-            gridData={powerFlowData.gridData}
-          />
-          <DispatchSchedule events={dispatchEvents} />
-          <SavingsMetrics gridImportAvoided={2.1} costSaved={59850} demandChargeSaved={12000} />
-        </div>
-
-        {/* Widget Grid Row 2 */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <ActiveAlarms alarms={alarms} />
-          <SustainabilityMetrics
-            solarGenerated={3.8}
-            co2Offset={1140}
-            kcuEstimate={1.14}
-            greenCertStatus="Pending EPRA"
-          />
-          <RaspberryPiGateways gateways={gateways} />
-        </div>
+      <main className="p-4 space-y-4 ml-0 transition-all duration-300">
+        {renderView()}
       </main>
     </div>
   );

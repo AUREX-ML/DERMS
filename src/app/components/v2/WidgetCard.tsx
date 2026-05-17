@@ -10,7 +10,7 @@ interface WidgetCardProps {
 
 export function WidgetCard({ title, icon: Icon, children, actions }: WidgetCardProps) {
   return (
-    <div className="bg-card rounded-lg border border-border shadow-lg overflow-hidden">
+    <div className="bg-card rounded-lg border border-border shadow-lg overflow-hidden hover:border-primary/50 transition-all duration-200">
       {/* Widget Header */}
       <div className="bg-[#1e2433] border-b border-border px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
