@@ -157,7 +157,7 @@ export default function AppV2() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-[#1a1f2e] text-foreground">
       {/* Header */}
       <DashboardHeader
         operator="Actis Energy Management"
@@ -177,28 +177,24 @@ export default function AppV2() {
       />
 
       {/* Main Content */}
-      <main className="p-6 space-y-6">
+      <main className="p-4 space-y-4">
         {/* Site List - Full Width */}
         <SiteList sites={sites} />
 
-        {/* Two Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Widget Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <PowerFlowTrend
             solarData={powerFlowData.solarData}
             bessData={powerFlowData.bessData}
             gridData={powerFlowData.gridData}
           />
           <DispatchSchedule events={dispatchEvents} />
-        </div>
-
-        {/* Two Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <SavingsMetrics gridImportAvoided={2.1} costSaved={59850} demandChargeSaved={12000} />
-          <ActiveAlarms alarms={alarms} />
         </div>
 
-        {/* Two Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Widget Grid Row 2 */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <ActiveAlarms alarms={alarms} />
           <SustainabilityMetrics
             solarGenerated={3.8}
             co2Offset={1140}

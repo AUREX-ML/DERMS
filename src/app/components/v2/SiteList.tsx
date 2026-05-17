@@ -1,4 +1,5 @@
 import { MapPin, Zap, Battery } from 'lucide-react';
+import { WidgetCard } from './WidgetCard';
 
 interface Site {
   id: string;
@@ -42,12 +43,7 @@ export function SiteList({ sites }: SiteListProps) {
   };
 
   return (
-    <div className="bg-card border border-border rounded-lg p-6">
-      <div className="flex items-center gap-2 mb-4">
-        <MapPin className="w-5 h-5 text-muted-foreground" />
-        <h3 className="text-sm text-muted-foreground uppercase tracking-wide">Nairobi Map — Site Status</h3>
-      </div>
-
+    <WidgetCard title="Site Status Map" icon={MapPin}>
       <div className="space-y-3">
         {sites.map((site) => {
           const statusColor = getStatusColor(site.status);
@@ -64,25 +60,45 @@ export function SiteList({ sites }: SiteListProps) {
                     : 'bg-status-critical/5 border-status-critical/30'
               }`}
             >
-              <div className="flex items-center gap-3 flex-1">
-                <div className="text-xl">{getStatusIcon(site.status)}</div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-mono font-semibold">{site.name}</span>
-                    <span className={`text-xs font-mono text-${statusColor} capitalize`}>{site.status}</span>
+              <div className="flex items-start gap-3 flex-1">
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-lg"
+                  style={{
+                    backgroundColor: site.status === 'online' ? 'rgba(16, 185, 129, 0.1)' :
+                                   site.status === 'partial' ? 'rgba(245, 158, 11, 0.1)' :
+                                   'rgba(239, 68, 68, 0.1)',
+                    border: `1px solid ${site.status === 'online' ? 'rgba(16, 185, 129, 0.3)' :
+                                       site.status === 'partial' ? 'rgba(245, 158, 11, 0.3)' :
+                                       'rgba(239, 68, 68, 0.3)'}`
+                  }}>
+                  {getStatusIcon(site.status)}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="font-semibold text-sm">{site.name}</span>
+                    <span className={`text-xs px-2 py-0.5 rounded text-${statusColor} capitalize bg-${statusColor}/10`}>
+                      {site.status}
+                    </span>
                   </div>
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <Zap className="w-3 h-3" />
-                      <span className="font-mono">{site.pvCapacity}kW PV</span>
+                  <div className="grid grid-cols-3 gap-3 text-xs">
+                    <div>
+                      <div className="text-muted-foreground mb-0.5">PV</div>
+                      <div className="font-semibold flex items-center gap-1">
+                        <Zap className="w-3 h-3 text-status-warning" />
+                        {site.pvCapacity}kW
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Battery className="w-3 h-3" />
-                      <span className="font-mono">{site.bessCapacity}kWh BESS</span>
+                    <div>
+                      <div className="text-muted-foreground mb-0.5">BESS</div>
+                      <div className="font-semibold flex items-center gap-1">
+                        <Battery className="w-3 h-3 text-primary" />
+                        {site.bessCapacity}kWh
+                      </div>
                     </div>
-                    <div className={`flex items-center gap-1 ${isLowSoc ? 'text-status-warning' : ''}`}>
-                      <span className="font-mono font-semibold">{site.currentSoc}%</span>
-                      {isLowSoc && <span className="text-status-warning">(low!)</span>}
+                    <div>
+                      <div className="text-muted-foreground mb-0.5">SoC</div>
+                      <div className={`font-semibold ${isLowSoc ? 'text-status-warning' : 'text-status-healthy'}`}>
+                        {site.currentSoc}%
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -91,6 +107,6 @@ export function SiteList({ sites }: SiteListProps) {
           );
         })}
       </div>
-    </div>
+    </WidgetCard>
   );
 }

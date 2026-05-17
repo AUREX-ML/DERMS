@@ -1,4 +1,5 @@
 import { AlertTriangle, Info, CheckCircle } from 'lucide-react';
+import { WidgetCard } from './WidgetCard';
 
 interface Alarm {
   id: string;
@@ -38,9 +39,7 @@ export function ActiveAlarms({ alarms }: ActiveAlarmsProps) {
   };
 
   return (
-    <div className="bg-card border border-border rounded-lg p-6">
-      <h3 className="text-sm text-muted-foreground uppercase tracking-wide mb-4">Active Alarms</h3>
-
+    <WidgetCard title="Active Alarms" icon={AlertTriangle}>
       <div className="space-y-2">
         {alarms.map((alarm) => (
           <div
@@ -61,6 +60,6 @@ export function ActiveAlarms({ alarms }: ActiveAlarmsProps) {
           </div>
         ))}
       </div>
-    </div>
+    </WidgetCard>
   );
 }

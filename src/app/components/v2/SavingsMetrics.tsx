@@ -1,4 +1,5 @@
 import { TrendingDown, DollarSign } from 'lucide-react';
+import { WidgetCard } from './WidgetCard';
 
 interface SavingsMetricsProps {
   gridImportAvoided: number;
@@ -8,12 +9,7 @@ interface SavingsMetricsProps {
 
 export function SavingsMetrics({ gridImportAvoided, costSaved, demandChargeSaved }: SavingsMetricsProps) {
   return (
-    <div className="bg-card border border-border rounded-lg p-6">
-      <div className="flex items-center gap-2 mb-4">
-        <TrendingDown className="w-5 h-5 text-status-healthy" />
-        <h3 className="text-sm text-muted-foreground uppercase tracking-wide">Today's Savings</h3>
-      </div>
-
+    <WidgetCard title="Today's Savings" icon={TrendingDown}>
       <div className="space-y-4">
         <div>
           <div className="text-xs text-muted-foreground mb-1">Grid Import Avoided</div>
@@ -44,6 +40,6 @@ export function SavingsMetrics({ gridImportAvoided, costSaved, demandChargeSaved
           </div>
         </div>
       </div>
-    </div>
+    </WidgetCard>
   );
 }

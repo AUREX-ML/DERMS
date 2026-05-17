@@ -1,4 +1,5 @@
 import { Leaf } from 'lucide-react';
+import { WidgetCard } from './WidgetCard';
 
 interface SustainabilityMetricsProps {
   solarGenerated: number;
@@ -14,12 +15,7 @@ export function SustainabilityMetrics({
   greenCertStatus,
 }: SustainabilityMetricsProps) {
   return (
-    <div className="bg-card border border-border rounded-lg p-6">
-      <div className="flex items-center gap-2 mb-4">
-        <Leaf className="w-5 h-5 text-status-healthy" />
-        <h3 className="text-sm text-muted-foreground uppercase tracking-wide">Sustainability</h3>
-      </div>
-
+    <WidgetCard title="Sustainability" icon={Leaf}>
       <div className="space-y-3">
         <div className="flex justify-between items-baseline">
           <span className="text-xs text-muted-foreground">Solar Generated</span>
@@ -45,6 +41,6 @@ export function SustainabilityMetrics({
           </div>
         </div>
       </div>
-    </div>
+    </WidgetCard>
   );
 }

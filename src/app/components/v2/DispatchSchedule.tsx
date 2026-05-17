@@ -1,4 +1,5 @@
 import { Calendar } from 'lucide-react';
+import { WidgetCard } from './WidgetCard';
 
 interface DispatchEvent {
   time: string;
@@ -12,12 +13,7 @@ interface DispatchScheduleProps {
 
 export function DispatchSchedule({ events }: DispatchScheduleProps) {
   return (
-    <div className="bg-card border border-border rounded-lg p-6">
-      <div className="flex items-center gap-2 mb-4">
-        <Calendar className="w-5 h-5 text-muted-foreground" />
-        <h3 className="text-sm text-muted-foreground uppercase tracking-wide">Dispatch Schedule</h3>
-      </div>
-
+    <WidgetCard title="Dispatch Schedule" icon={Calendar}>
       <div className="space-y-3">
         {events.map((event, index) => (
           <div key={`event-${index}`} className="flex items-center gap-3 p-3 bg-secondary rounded-lg">
@@ -31,6 +27,6 @@ export function DispatchSchedule({ events }: DispatchScheduleProps) {
           </div>
         ))}
       </div>
-    </div>
+    </WidgetCard>
   );
 }

@@ -1,3 +1,6 @@
+import { Activity } from 'lucide-react';
+import { WidgetCard } from './WidgetCard';
+
 interface PowerFlowTrendProps {
   solarData: number[];
   bessData: number[];
@@ -8,9 +11,7 @@ export function PowerFlowTrend({ solarData, bessData, gridData }: PowerFlowTrend
   const maxValue = Math.max(...solarData, ...bessData, ...gridData);
 
   return (
-    <div className="bg-card border border-border rounded-lg p-6">
-      <h3 className="text-sm text-muted-foreground uppercase tracking-wide mb-4">Power Flow (24h trend)</h3>
-
+    <WidgetCard title="Power Flow (24h)" icon={Activity}>
       <div className="space-y-4">
         {/* Visual Bar Chart */}
         <div className="flex items-end gap-0.5 h-24">
@@ -63,6 +64,6 @@ export function PowerFlowTrend({ solarData, bessData, gridData }: PowerFlowTrend
           </div>
         </div>
       </div>
-    </div>
+    </WidgetCard>
   );
 }
