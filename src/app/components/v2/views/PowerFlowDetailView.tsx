@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { ChevronLeft, Activity, TrendingUp, TrendingDown } from 'lucide-react';
 import { WidgetCard } from '../WidgetCard';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
@@ -7,26 +8,26 @@ interface PowerFlowDetailViewProps {
 }
 
 export function PowerFlowDetailView({ onBack }: PowerFlowDetailViewProps) {
-  // Generate 24-hour data
-  const generateData = () => {
-    const data = [];
+  // Generate 24-hour data with useMemo to prevent regeneration
+  const data = useMemo(() => {
+    const chartData = [];
     for (let i = 0; i < 24; i++) {
       const solar = Math.max(0, Math.sin(((i - 6) / 12) * Math.PI) * 800 + Math.random() * 100);
       const bess = (i >= 6 && i <= 9) || (i >= 17 && i <= 20) ? 300 + Math.random() * 100 : 0;
       const grid = solar < 200 ? 400 + Math.random() * 200 : Math.random() * 50;
 
-      data.push({
-        hour: `${i}:00`,
+      chartData.push({
+        id: `hour-${i}`,
+        hour: `${String(i).padStart(2, '0')}:00`,
         solar: Math.round(solar),
         bess: Math.round(bess),
         grid: Math.round(grid),
         total: Math.round(solar + bess + grid),
       });
     }
-    return data;
-  };
+    return chartData;
+  }, []);
 
-  const data = generateData();
   const currentHour = new Date().getHours();
   const current = data[currentHour];
 
@@ -104,6 +105,7 @@ export function PowerFlowDetailView({ onBack }: PowerFlowDetailViewProps) {
               />
               <Legend />
               <Area
+                key="area-solar"
                 type="monotone"
                 dataKey="solar"
                 stroke="#f59e0b"
@@ -111,6 +113,7 @@ export function PowerFlowDetailView({ onBack }: PowerFlowDetailViewProps) {
                 name="Solar (kW)"
               />
               <Area
+                key="area-bess"
                 type="monotone"
                 dataKey="bess"
                 stroke="#06b6d4"
@@ -118,6 +121,7 @@ export function PowerFlowDetailView({ onBack }: PowerFlowDetailViewProps) {
                 name="BESS (kW)"
               />
               <Area
+                key="area-grid"
                 type="monotone"
                 dataKey="grid"
                 stroke="#8b92ab"
